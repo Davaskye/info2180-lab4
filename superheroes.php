@@ -81,6 +81,7 @@ if ($q == ""){
 $q = $_REQUEST["character-search"];
 
 $resultChecker = "";
+$only_one = 0;
 
 // lookup all heroes from array if $q is different from ""
 if ($q !== "") {
@@ -97,6 +98,7 @@ if ($q !== "") {
         echo "<p>";
         echo $hero['biography'];
         echo "</p>";
+        $only_one = 1;
     }
     elseif (stristr($q, substr($hero['alias'], 0, $len))) {
       if ($resultChecker === "") {
@@ -117,7 +119,7 @@ if ($q !== "") {
 
 // Output "Superhero not found" if no hero was found or output correct values
 
-if ($resultChecker ==="" && $q !==""){
+if ($resultChecker ==="" && $q !=="" && $only_one == 0){
     echo "Hero not found!";
 }
 
