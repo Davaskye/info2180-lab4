@@ -65,8 +65,65 @@ $superheroes = [
 
 ?>
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+<?php $q = $_REQUEST["character-search"]; 
+if ($q == ""){
+    foreach ($superheroes as $superhero){
+        echo "<ul><li>";
+        echo $superhero['alias']; 
+        echo "</li></ul>";
+    }
+} 
+?>
+
+
+<?php
+// get the character search parameter from URL
+$q = $_REQUEST["character-search"];
+
+$resultChecker = "";
+
+// lookup all heroes from array if $q is different from ""
+if ($q !== "") {
+  //$q = strtolower($q);
+  $len=strlen($q);
+  foreach($superheroes as $hero) {
+    if ($q == $hero['name'] || $q == $hero['alias']){
+        echo "<h3>";
+        echo $hero['alias'];
+        echo "</h3>";
+        echo "<h4>";
+        echo $hero['name'];
+        echo "</h4>";
+        echo "<p>";
+        echo $hero['biography'];
+        echo "</p>";
+    }
+    elseif (stristr($q, substr($hero['alias'], 0, $len))) {
+      if ($resultChecker === "") {
+        $resultChecker = $hero['alias'];
+      } else {
+        $resultChecker .= "<li>".$hero['alias']."</li>";
+      }
+    }
+    elseif (stristr($q, substr($hero['name'], 0, $len))){
+        if ($resultChecker === "") {
+        $resultChecker = $hero['alias'];
+      } else {
+        $resultChecker .= "<li>".$hero['alias']."</li>";
+      }
+    }
+  }
+}
+
+// Output "Superhero not found" if no hero was found or output correct values
+
+if ($resultChecker ==="" && $q !==""){
+    echo "Hero not found!";
+}
+
+if ($resultChecker !== ""){
+    echo $resultChecker;
+}
+
+
+?>
